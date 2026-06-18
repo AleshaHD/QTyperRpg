@@ -1,0 +1,34 @@
+key;en;ru
+lang_ru;Russian;Русский
+lang_en;English;Английский
+lang;Language;Язык
+lang_layout;Layout language;Язык раскладки
+btn_start;Start;Начать игру
+btn_settings;Settings;Настройки
+btn_exit;Exit;Выход
+btn_back;Back;Назад
+btn_resume;Resume;Вернутся
+btn_restart;Restart;Начать заново
+btn_stats;Stats;Статистика
+btn_main_menu;Main menu;Главное меню
+btn_try_again;Try again;Сыграть еще
+volume;Volume;Звук
+music;Music;Музыка
+resolution;Resolution;Разрешение экрана
+window_mode;Screen mode;Экранный режим
+wm_windowed;Windowed;В окне
+wm_fullscreen;Fullscreen;Полный экран
+game_stats;All-time statistics;Статистика за все время
+clear_stats;Clear;Очистить
+lvl_complete;Level Completed!;Уровень завершен!
+title_pause;Pause;Пауза
+title_settings;Settings;Настройки
+title_select_session;Select Session;Выберите Сеанс
+acc;Accuracy;Точность
+time;Time;Время
+timer;Timer;Время
+progress;Progress;Прогресс
+difficult;Difficult level;Уровень сложности
+diff_easy;Easy;Легкий
+diff_normal;Normal;Нормальный
+diff_hard;Hard;Сложный

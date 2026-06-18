@@ -1,0 +1,131 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>2066b44d-f383-4f5e-8d93-ba9cca26d433</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>main.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>QTyperRpg</Name>
+    <RootNamespace>QTyperRpg</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="assets\" />
+    <Folder Include="assets\fonts\" />
+    <Folder Include="assets\images\" />
+    <Folder Include="assets\images\bg\" />
+    <Folder Include="assets\images\bg\battleback\" />
+    <Folder Include="assets\images\hands\" />
+    <Folder Include="assets\images\hands\l\" />
+    <Folder Include="assets\images\hands\r\" />
+    <Folder Include="assets\sounds\" />
+    <Folder Include="assets\sounds\effects\" />
+    <Folder Include="assets\sounds\music\" />
+    <Folder Include="assets\texts\" />
+    <Folder Include="assets\texts\en\" />
+    <Folder Include="assets\texts\ru\" />
+    <Folder Include="core\" />
+    <Folder Include="logic\" />
+    <Folder Include="logic\Effects\" />
+    <Folder Include="ui\" />
+    <Folder Include="ui\components\" />
+    <Folder Include="ui\screens\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\fonts\minecraft.ttf" />
+    <Content Include="assets\images\bg\battleback\battleback1.png" />
+    <Content Include="assets\images\bg\battleback\battleback10.png" />
+    <Content Include="assets\images\bg\battleback\battleback2.png" />
+    <Content Include="assets\images\bg\battleback\battleback3.png" />
+    <Content Include="assets\images\bg\battleback\battleback4.png" />
+    <Content Include="assets\images\bg\battleback\battleback5.png" />
+    <Content Include="assets\images\bg\battleback\battleback6.png" />
+    <Content Include="assets\images\bg\battleback\battleback7.png" />
+    <Content Include="assets\images\bg\battleback\battleback8.png" />
+    <Content Include="assets\images\bg\battleback\battleback9.png" />
+    <Content Include="assets\images\bg\main_menu_bg.jpg" />
+    <Content Include="assets\images\hands\l\l_hand.png" />
+    <Content Include="assets\images\hands\l\l_hand_index.png" />
+    <Content Include="assets\images\hands\l\l_hand_little.png" />
+    <Content Include="assets\images\hands\l\l_hand_middle.png" />
+    <Content Include="assets\images\hands\l\l_hand_ring.png" />
+    <Content Include="assets\images\hands\l\l_hand_thumb.png" />
+    <Content Include="assets\images\hands\l_hand.png" />
+    <Content Include="assets\images\hands\r\r_hand.png" />
+    <Content Include="assets\images\hands\r\r_hand_index.png" />
+    <Content Include="assets\images\hands\r\r_hand_little.png" />
+    <Content Include="assets\images\hands\r\r_hand_middle.png" />
+    <Content Include="assets\images\hands\r\r_hand_ring.png" />
+    <Content Include="assets\images\hands\r\r_hand_thumb.png" />
+    <Content Include="assets\images\hands\r_hand.png" />
+    <Content Include="assets\images\icon.jpg" />
+    <Content Include="assets\lang.csv" />
+    <Content Include="assets\sounds\effects\minecraft_click.wav" />
+    <Content Include="assets\sounds\music\660655ec5901fb8.mp3" />
+    <Content Include="assets\sounds\music\In mood %28full version%29.wav" />
+    <Content Include="assets\texts\en\1.txt" />
+    <Content Include="assets\texts\en\10.txt" />
+    <Content Include="assets\texts\en\2.txt" />
+    <Content Include="assets\texts\en\3.txt" />
+    <Content Include="assets\texts\en\4.txt" />
+    <Content Include="assets\texts\en\5.txt" />
+    <Content Include="assets\texts\en\6.txt" />
+    <Content Include="assets\texts\en\7.txt" />
+    <Content Include="assets\texts\en\8.txt" />
+    <Content Include="assets\texts\en\9.txt" />
+    <Content Include="assets\texts\ru\1.txt" />
+    <Content Include="assets\texts\ru\10.txt" />
+    <Content Include="assets\texts\ru\2.txt" />
+    <Content Include="assets\texts\ru\3.txt" />
+    <Content Include="assets\texts\ru\4.txt" />
+    <Content Include="assets\texts\ru\5.txt" />
+    <Content Include="assets\texts\ru\6.txt" />
+    <Content Include="assets\texts\ru\7.txt" />
+    <Content Include="assets\texts\ru\8.txt" />
+    <Content Include="assets\texts\ru\9.txt" />
+    <Content Include="assets\texts\test.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Configuration.py" />
+    <Compile Include="core\LangManager.py" />
+    <Compile Include="core\Music.py" />
+    <Compile Include="core\TextLoader.py" />
+    <Compile Include="logic\Effects\Particle.py" />
+    <Compile Include="logic\GameStats.py" />
+    <Compile Include="main.py" />
+    <Compile Include="ui\components\Background.py" />
+    <Compile Include="ui\components\Button.py" />
+    <Compile Include="ui\components\ComboBox.py" />
+    <Compile Include="ui\components\Keyboard.py" />
+    <Compile Include="ui\components\MenuPlatform.py" />
+    <Compile Include="ui\components\Slider.py" />
+    <Compile Include="ui\components\TextLineWidget.py" />
+    <Compile Include="ui\screens\EndScreen.py" />
+    <Compile Include="ui\screens\GameScreen.py" />
+    <Compile Include="ui\screens\MainMenu.py" />
+    <Compile Include="ui\screens\PauseScreen.py" />
+    <Compile Include="ui\screens\SessionScreen.py" />
+    <Compile Include="ui\screens\SettingsScreen.py" />
+    <Compile Include="ui\screens\StatsScreen.py" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>

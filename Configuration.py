@@ -1,0 +1,73 @@
+from core.LangManager import LangManager
+from enum import Enum, auto
+class States(Enum):
+    MAIN_MENU = auto()
+    SETTINGS = auto()
+    SELECT_SESSION = auto()
+    PLAYING = auto()
+    PAUSE_MENU = auto()
+    END_SCREEN = auto()
+    STATS = auto()
+class WindowMode(Enum):
+    WINDOWED = auto()
+    FULLSCREEN = auto()
+class Difficult(Enum):
+    EASY = auto()
+    NORMAL = auto()
+    HARD = auto()
+
+TITLE_FONT_SIZE = 24
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED =   (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE =  (0, 0, 255)
+
+import os
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+def get_font_path(path):
+    return os.path.normpath(os.path.join(ROOT_DIR, path))
+def ensure_dir_exists(file_path):
+    directory = os.path.dirname(file_path)
+    if directory and not os.path.exists(directory):
+        os.makedirs(directory)
+USER_DATA_DIR = get_font_path("user_data/")
+SAVE_FILE = os.path.join(USER_DATA_DIR, "config.json")
+STATS_FILE = os.path.join(USER_DATA_DIR, "stats.json")
+
+ASSETS_DIR = "assets/"
+
+GAME_MUSIC = ASSETS_DIR + "sounds/music/In mood (full version).wav"
+MENU_MUSIC = ASSETS_DIR + "sounds/music/660655ec5901fb8.mp3"
+BUTTON_SOUND = ASSETS_DIR + "sounds/effects/minecraft_click.wav"
+
+MAIN_FONT = ASSETS_DIR + "fonts/minecraft.ttf"
+WIN_ICON = ASSETS_DIR + "images/icon.jpg"
+
+MAIN_MENU_BG = ASSETS_DIR + "images/bg/main_menu_bg.jpg"
+
+LANG_FILE = ASSETS_DIR + "lang.csv"
+
+
+LANG_MANAGER = LangManager(LANG_FILE)
+MODE_NAMES = {
+    WindowMode.WINDOWED: LANG_MANAGER.get("wm_windowed"),
+    WindowMode.FULLSCREEN: LANG_MANAGER.get("wm_fullscreen"),
+}
+
+WIN_RESOLUTIONS = [
+    (800, 600),
+    (1024, 768),
+    (1280, 720),
+    (1366, 768),
+    (1440, 900),
+    (1600, 900),
+    (1920, 1080)
+]
+
+DIFFICULT_NAMES = {
+    Difficult.EASY: LANG_MANAGER.get("diff_easy"),
+    Difficult.EASY: LANG_MANAGER.get("diff_normal"),
+    Difficult.EASY: LANG_MANAGER.get("diff_hard")
+}
