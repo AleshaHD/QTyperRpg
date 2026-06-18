@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v1.0.0'
+      - 'v*'
 
 jobs:
   build:
@@ -11,13 +11,10 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            output_name: QTyper.exe
+            artifact_name: QTyper-Windows
           - os: ubuntu-latest
-            output_name: QTyper
-          - os: macos-latest
-            output_name: QTyper
+            artifact_name: QTyper-Linux
     runs-on: ${{ matrix.os }}
-    
     steps:
       - uses: actions/checkout@v4
       
@@ -27,13 +24,21 @@ jobs:
           python-version: '3.10'
           
       - name: Install dependencies
-        run: pip install pyinstaller pygame pyside6
+        run: pip install pyinstaller pyside6 pygame
         
       - name: Build with PyInstaller
-        run: pyinstaller --noconsole --name QTyper --add-data "assets;assets" main.py
+        run: pyinstaller --noconsole --name QTyper main.py
+        
+      - name: Copy assets (Cross-platform)
+        # Копируем папку assets через Python, чтобы работало и на Windows, и на Linux
+        shell: python
+        run: |
+          import shutil, os
+          os.makedirs('dist/QTyper/assets', exist_ok=True)
+          shutil.copytree('assets', 'dist/QTyper/assets', dirs_exist_ok=True)
         
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-${{ matrix.os }}
-          path: dist/${{ matrix.output_name }}
+          name: ${{ matrix.artifact_name }}
+          path: dist/QTyper/
