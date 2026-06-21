@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     tags:
-      - 'v1.0.0'
+      - 'v1.0.2'
 
 jobs:
   build:
@@ -12,8 +12,10 @@ jobs:
         include:
           - os: windows-latest
             artifact_name: QTyper-Windows
+            separator: ';'
           - os: ubuntu-latest
             artifact_name: QTyper-Linux
+            separator: ':'
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -30,7 +32,6 @@ jobs:
         run: pyinstaller --noconsole --name QTyper main.py
         
       - name: Copy assets (Cross-platform)
-        # Копируем папку assets через Python, чтобы работало и на Windows, и на Linux
         shell: python
         run: |
           import shutil, os
