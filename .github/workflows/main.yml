@@ -12,8 +12,10 @@ jobs:
         include:
           - os: windows-latest
             artifact_name: QTyper-Windows
+            separator: ';'
           - os: ubuntu-latest
             artifact_name: QTyper-Linux
+            separator: ':'
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -27,15 +29,8 @@ jobs:
         run: pip install pyinstaller pyside6 pygame
         
       - name: Build with PyInstaller
-        run: pyinstaller --noconsole --name QTyper main.py
-        
-      - name: Copy assets (Cross-platform)
-        # Копируем папку assets через Python, чтобы работало и на Windows, и на Linux
-        shell: python
-        run: |
-          import shutil, os
-          os.makedirs('dist/QTyper/assets', exist_ok=True)
-          shutil.copytree('assets', 'dist/QTyper/assets', dirs_exist_ok=True)
+        # Используем = и динамический разделитель, который мы задали в matrix
+        run: pyinstaller --noconsole --name QTyper --add-data "assets${{ matrix.separator }}assets" main.py
         
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
