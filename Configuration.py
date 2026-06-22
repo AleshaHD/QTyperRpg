@@ -1,3 +1,4 @@
+import os.path
 from core.LangManager import LangManager
 from enum import Enum, auto
 class States(Enum):
@@ -24,7 +25,7 @@ RED =   (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE =  (0, 0, 255)
 
-import os
+import os, sys
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 def get_font_path(path):
     return os.path.normpath(os.path.join(ROOT_DIR, path))
@@ -32,22 +33,28 @@ def ensure_dir_exists(file_path):
     directory = os.path.dirname(file_path)
     if directory and not os.path.exists(directory):
         os.makedirs(directory)
+def resource_path(path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, path)
 USER_DATA_DIR = get_font_path("user_data/")
 SAVE_FILE = os.path.join(USER_DATA_DIR, "config.json")
 STATS_FILE = os.path.join(USER_DATA_DIR, "stats.json")
 
-ASSETS_DIR = "assets/"
+ASSETS_DIR = resource_path("assets/")
 
-GAME_MUSIC = ASSETS_DIR + "sounds/music/In mood (full version).wav"
-MENU_MUSIC = ASSETS_DIR + "sounds/music/660655ec5901fb8.mp3"
-BUTTON_SOUND = ASSETS_DIR + "sounds/effects/minecraft_click.wav"
+GAME_MUSIC = os.path.join(ASSETS_DIR, "sounds/music/In mood (full version).wav")
+MENU_MUSIC = os.path.join(ASSETS_DIR, "sounds/music/660655ec5901fb8.mp3")
+BUTTON_SOUND = os.path.join(ASSETS_DIR, "sounds/effects/minecraft_click.wav")
 
-MAIN_FONT = ASSETS_DIR + "fonts/minecraft.ttf"
-WIN_ICON = ASSETS_DIR + "images/icon.jpg"
+MAIN_FONT = os.path.join(ASSETS_DIR, "fonts/minecraft.ttf")
+WIN_ICON = os.path.join(ASSETS_DIR, "images/icon.jpg")
 
-MAIN_MENU_BG = ASSETS_DIR + "images/bg/main_menu_bg.jpg"
+MAIN_MENU_BG = os.path.join(ASSETS_DIR, "images/bg/main_menu_bg.jpg")
 
-LANG_FILE = ASSETS_DIR + "lang.csv"
+LANG_FILE = os.path.join(ASSETS_DIR, "lang.csv")
 
 
 LANG_MANAGER = LangManager(LANG_FILE)

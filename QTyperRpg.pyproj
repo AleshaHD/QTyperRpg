@@ -11,6 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>QTyperRpg</Name>
     <RootNamespace>QTyperRpg</RootNamespace>
+    <SuppressConfigureTestFrameworkPrompt>true</SuppressConfigureTestFrameworkPrompt>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,8 +22,6 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include=".github\" />
-    <Folder Include=".github\workflows\" />
     <Folder Include="assets\" />
     <Folder Include="assets\fonts\" />
     <Folder Include="assets\images\" />
@@ -45,7 +44,6 @@
     <Folder Include="ui\screens\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include=".github\workflows\main.yml" />
     <Content Include="assets\fonts\minecraft.ttf" />
     <Content Include="assets\images\bg\battleback\battleback1.png" />
     <Content Include="assets\images\bg\battleback\battleback10.png" />
