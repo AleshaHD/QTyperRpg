@@ -26,9 +26,6 @@ GREEN = (0, 255, 0)
 BLUE =  (0, 0, 255)
 
 import os, sys
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-def get_font_path(path):
-    return os.path.normpath(os.path.join(ROOT_DIR, path))
 def ensure_dir_exists(file_path):
     directory = os.path.dirname(file_path)
     if directory and not os.path.exists(directory):
@@ -44,7 +41,6 @@ def get_app_dir():
         return os.path.dirname(sys.executable)
     return os.path.dirname(os.path.abspath(__file__))
 APP_DIR = get_app_dir()
-#USER_DATA_DIR = get_font_path("user_data/")
 USER_DATA_DIR = os.path.join(APP_DIR, "user_data")
 SAVE_FILE = os.path.join(USER_DATA_DIR, "config.json")
 STATS_FILE = os.path.join(USER_DATA_DIR, "stats.json")
