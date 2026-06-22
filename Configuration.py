@@ -39,7 +39,13 @@ def resource_path(path):
     except Exception:
         base_path = os.path.abspath(".")
     return os.path.join(base_path, path)
-USER_DATA_DIR = get_font_path("user_data/")
+def get_app_dir():
+    if getattr(sys, "frozen", False):
+        return os.path.dirname(sys.executable)
+    return os.path.dirname(os.path.abspath(__file__))
+APP_DIR = get_app_dir()
+#USER_DATA_DIR = get_font_path("user_data/")
+USER_DATA_DIR = os.path.join(APP_DIR, "user_data")
 SAVE_FILE = os.path.join(USER_DATA_DIR, "config.json")
 STATS_FILE = os.path.join(USER_DATA_DIR, "stats.json")
 
