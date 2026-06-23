@@ -26,6 +26,9 @@ GREEN = (0, 255, 0)
 BLUE =  (0, 0, 255)
 
 import os, sys
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+def get_font_path(path):
+    return os.path.normpath(os.path.join(ROOT_DIR, path))
 def ensure_dir_exists(file_path):
     directory = os.path.dirname(file_path)
     if directory and not os.path.exists(directory):
@@ -52,7 +55,7 @@ MENU_MUSIC = os.path.join(ASSETS_DIR, "sounds/music/660655ec5901fb8.mp3")
 BUTTON_SOUND = os.path.join(ASSETS_DIR, "sounds/effects/minecraft_click.wav")
 
 MAIN_FONT = os.path.join(ASSETS_DIR, "fonts/minecraft.ttf")
-WIN_ICON = os.path.join(ASSETS_DIR, "images/icon.jpg")
+WIN_ICON = os.path.join(ASSETS_DIR, "images/icon.ico")
 
 MAIN_MENU_BG = os.path.join(ASSETS_DIR, "images/bg/main_menu_bg.jpg")
 

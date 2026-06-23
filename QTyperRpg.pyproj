@@ -70,7 +70,7 @@
     <Content Include="assets\images\hands\r\r_hand_ring.png" />
     <Content Include="assets\images\hands\r\r_hand_thumb.png" />
     <Content Include="assets\images\hands\r_hand.png" />
-    <Content Include="assets\images\icon.jpg" />
+    <Content Include="assets\images\icon.ico" />
     <Content Include="assets\lang.csv" />
     <Content Include="assets\sounds\effects\minecraft_click.wav" />
     <Content Include="assets\sounds\music\660655ec5901fb8.mp3" />
