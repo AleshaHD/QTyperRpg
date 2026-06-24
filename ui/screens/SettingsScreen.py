@@ -202,6 +202,7 @@ class SettingsScreen(BackgroundPage):
 
             self.vol_label.setText(f"{self.lang.get('volume')} {int(self.game.vol_value)}%")
             self.mus_label.setText(f"{self.lang.get('music')} {int(self.game.mus_value)}%")
+            self.lang_label.setText(self.lang.get("lang"))
             self.window_mode.setText(self.lang.get("window_mode"))
             self.btn_back.setText(self.lang.get("btn_back"))
             self.title.setText(self.lang.get("title_settings"))

@@ -50,6 +50,7 @@ class StatsScreen(BackgroundPage):
         super().__init__(obj)
         self.game = obj
         self.lang = self.game.lang_manager
+        self.msg = None
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -139,9 +140,9 @@ class StatsScreen(BackgroundPage):
 
         matches = self.game.stats_history.get_all_matches()
         if not matches:
-            msg = PixelTextWidget("No matches found", 18, MAIN_FONT, self)
-            msg.set_effects(color=QColor(150, 150, 150))
-            self.stats_layout.addWidget(msg)
+            self.msg = PixelTextWidget(self.lang.get("no_matches_found"), 18, MAIN_FONT, self)
+            self.msg.set_effects(color=QColor(150, 150, 150))
+            self.stats_layout.addWidget(self.msg)
         else:
             for i, m in enumerate(matches, 1):
                 text = f"{i}. {m['timestamp']} | WPM: {m['wpm']} | ACC: {m['accuracy']}%"
@@ -156,6 +157,7 @@ class StatsScreen(BackgroundPage):
         self.game.stats_history.matches = []
         self.game.stats_history.save()
         self.refresh_stats()
+        self.msg = None
 
     def adjust_panel_size(self):
         self.stats_layout.activate()
@@ -163,29 +165,38 @@ class StatsScreen(BackgroundPage):
 
         stats_h = self.stats_container.sizeHint().height()
         title_h = self.title.sizeHint().height()
-        buttons_h = self.btn_back.sizeHint().height() + self.btn_reset.sizeHint().height() + 30
+        buttons_h = self.btn_back.sizeHint().height() + 40 
 
-        must_height = title_h + stats_h + buttons_h + 120
-        max_height = self.height() - 120
+        must_height = title_h + stats_h + buttons_h + 100
+        max_height = self.height() - 100
         min_height = 320
         final_height = max(min_height, min(must_height, max_height))
 
         stats_w = self.stats_container.sizeHint().width()
         title_w = self.title.sizeHint().width()
+        btns_w = self.btn_back.sizeHint().width() + self.btn_reset.sizeHint().width() + 60
 
-        final_width = max(title_w, stats_w, 300) + 80
+        final_width = max(title_w, stats_w, btns_w, 300) + 80
         final_width = min(final_width, 700)
 
-        self.panel.setFixedSize(final_width, final_height)
+        self.panel.setMinimumSize(int(final_width), int(final_height))
+        self.panel.resize(int(final_width), int(final_height))
         self.panel.update()
 
     def update_ui(self):
         """
         Функция для обновления текста на экране при смене языка
         """
+        if self.msg is not None:
+            self.msg.set_text(self.lang.get("no_matches_found"))
         self.btn_back.setText(self.lang.get("btn_back"))
         self.btn_reset.setText(self.lang.get("clear_stats"))
         self.title.setText(self.lang.get("game_stats"))
+
+        self.title.adjustSize()
+        self.btn_back.adjustSize()
+        self.btn_reset.adjustSize()
+        self.adjust_panel_size()
 
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -197,4 +208,3 @@ class StatsScreen(BackgroundPage):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.adjust_panel_size()
