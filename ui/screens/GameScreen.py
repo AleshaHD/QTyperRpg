@@ -142,7 +142,7 @@ class GameScreen(BackgroundPage):
         else:
             self.stats.wrong_attemts += 1
             self.stats.hits.append(0)
-            #print(f"WRONG \"{char}\" must \"{expected_char}\"")
+            print(f"WRONG \"{char}\" must \"{expected_char}\"")
 
         if len(self.stats.hits) > 127:
             self.stats.hits.pop(0)
@@ -156,8 +156,6 @@ class GameScreen(BackgroundPage):
         """
         self.update_stats_display()
         self.update_timer_display()
-        if self.isVisible(): 
-            self.start_session()
         self.ensure_timer_running()
 
     def showEvent(self, event):

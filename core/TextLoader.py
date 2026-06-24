@@ -1,6 +1,6 @@
 import os, random
 
-from Configuration import Difficult
+from Configuration import TEST_TEXT, Difficult
 
 class TextLoader:
     """
@@ -34,30 +34,34 @@ class TextLoader:
         """
         Функция рандомного выбора файла с текстом
         """
-        current_lang = self.game.current_lang_layout 
-        folder_path = os.path.join(self.__base_path, current_lang)
+        if TEST_TEXT:
+            return self._open_file("assets/texts/test.txt")
 
-        if not os.path.exists(folder_path):
-            os.makedirs(folder_path, exist_ok=True)
-            return f"Папка {folder_path} создана, добавьте в нее файлы .txt"
+        else:
+            current_lang = self.game.current_lang_layout 
+            folder_path = os.path.join(self.__base_path, current_lang)
 
-        files = [f for f in os.listdir(folder_path) if f.endswith('.txt')]
+            if not os.path.exists(folder_path):
+                os.makedirs(folder_path, exist_ok=True)
+                return f"Папка {folder_path} создана, добавьте в нее файлы .txt"
+
+            files = [f for f in os.listdir(folder_path) if f.endswith('.txt')]
         
-        if not files:
-            return "Файлы с текстом не найдены"
+            if not files:
+                return "Файлы с текстом не найдены"
             
-        if difficult == Difficult.EASY:
-            self.clean_text = True
-            self.to_lower = True
-        elif difficult == Difficult.NORMAL:
-            self.clean_text = True
-            self.to_lower = False
-        elif difficult == Difficult.HARD:
-            self.clean_text = False
-            self.to_lower = False
+            if difficult == Difficult.EASY:
+                self.clean_text = True
+                self.to_lower = True
+            elif difficult == Difficult.NORMAL:
+                self.clean_text = True
+                self.to_lower = False
+            elif difficult == Difficult.HARD:
+                self.clean_text = False
+                self.to_lower = False
             
-        target_file = random.choice(files)
-        full_path = os.path.join(folder_path, target_file)
+            target_file = random.choice(files)
+            full_path = os.path.join(folder_path, target_file)
 
-        print(f"Текст из файла: {target_file}")
-        return self._open_file(full_path)
+            print(f"Текст из файла: {target_file}")
+            return self._open_file(full_path)

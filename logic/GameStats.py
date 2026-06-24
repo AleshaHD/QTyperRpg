@@ -72,9 +72,16 @@ class GameStats:
         """
         if self.start_time is None:
             return 0.0
+
         if self.is_finished:
             return self.elapsed_time
-        return max(0.0, time.time() - self.start_time - self.total_pause_time)
+
+        current_pause = 0.0
+
+        if self.pause_start_time is not None:
+            current_pause = time.time() - self.pause_start_time
+
+        return max(0.0, time.time() - self.start_time - self.total_pause_time - current_pause)
     def get_timer(self):
         """
         Функция для получения финального времени
