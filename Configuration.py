@@ -60,8 +60,8 @@ WIN_ICON = os.path.join(ASSETS_DIR, "images/icon.ico")
 
 MAIN_MENU_BG = os.path.join(ASSETS_DIR, "images/bg/main_menu_bg.jpg")
 
+TEXTS_FILES = os.path.join(ASSETS_DIR, "assets/texts")
 LANG_FILE = os.path.join(ASSETS_DIR, "lang.csv")
-
 
 LANG_MANAGER = LangManager(LANG_FILE)
 MODE_NAMES = {

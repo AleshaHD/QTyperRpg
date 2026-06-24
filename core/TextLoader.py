@@ -1,6 +1,6 @@
 import os, random
 
-from Configuration import TEST_TEXT, Difficult
+from Configuration import TEST_TEXT, TEXTS_FILES, Difficult
 
 class TextLoader:
     """
@@ -8,7 +8,7 @@ class TextLoader:
     """
     def __init__(self, obj):
         self.game = obj
-        self.__base_path = "assets/texts"
+        self.__base_path = TEXTS_FILES
         self.clean_text = True
         self.to_lower = False
 
