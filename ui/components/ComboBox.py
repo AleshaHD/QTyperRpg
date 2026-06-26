@@ -199,8 +199,8 @@ class PixelComboBox(QComboBox):
         painter.drawRect(arrow_x - 4, arrow_y - 4, 12, 4)
 
     def _auto_align(self):
-        if self.parentWidget() and self.parentWidget().layout:
-            self.parentWidget().layout.setAlignment(self, Qt.AlignmentFlag.AlignHCenter)
+        if self.parentWidget() and self.parentWidget().layout():
+            self.parentWidget().layout().setAlignment(self, Qt.AlignmentFlag.AlignHCenter)
 
     def showEvent(self, event):
         super().showEvent(event)

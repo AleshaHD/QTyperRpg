@@ -30,6 +30,7 @@ class Game(QMainWindow):
         super().__init__()
         self.setWindowTitle("QTyper")
         self.setWindowIcon(QIcon(WIN_ICON))
+        self.setMinimumSize(640, 515)
 
         self.settings_pause_overlay = False
         self.stats_overlay = False
@@ -116,11 +117,13 @@ class Game(QMainWindow):
         self.previous_state = self.state
         self.state = new_state
 
+        # Состояние "Главное меню"
         if self.state == States.MAIN_MENU:
             self.music_player.play_track(MENU_MUSIC)
             self.pause_screen.hide()
             self.stacked_widget.setCurrentWidget(self.menu_screen)
 
+        # Состояние "Меню настроек"
         elif self.state == States.SETTINGS:
             self.pause_screen.hide()
             self.settings_screen.setGeometry(0, 0, self.width(), self.height())
@@ -138,20 +141,26 @@ class Game(QMainWindow):
                 self.stacked_widget.setCurrentWidget(self.menu_screen)
                 self.music_player.play_track(MENU_MUSIC)
 
+        # Состояние "Экран игры"
         elif self.state == States.PLAYING:
             self.pause_screen.hide()
             self.game_screen.setFocus()
             self.stacked_widget.setCurrentWidget(self.game_screen)
 
-            if self.previous_state == States.PAUSE_MENU or (self.previous_state == States.SETTINGS and self.settings_pause_overlay):
+            if self.previous_state == States.PAUSE_MENU or \
+               (self.previous_state == States.SETTINGS and self.settings_pause_overlay) or \
+               (self.previous_state == States.STATS and self.stats_overlay):
                 self.music_player.resume()
             else:
                 self.music_player.play_track(GAME_MUSIC)
-            if self.previous_state == States.SELECT_SESSION or self.previous_state != States.PAUSE_MENU:
+            if self.previous_state == States.SELECT_SESSION or \
+                self.previous_state != States.PAUSE_MENU and not \
+                (self.previous_state == States.STATS and self.stats_overlay):
                 self.game_screen.start_session()
             else:
                 self.stats.end_pause()
 
+        # Состояние "Меню выбора"
         elif self.state == States.SELECT_SESSION:
             self.music_player.play_track(MENU_MUSIC)
             self.pause_screen.hide()
@@ -164,6 +173,7 @@ class Game(QMainWindow):
             self.select_session.raise_()
             self.select_session.setFocus()
 
+        # Состояние "Меню паузы"
         elif self.state == States.PAUSE_MENU:
             self.music_player.pause()
             if self.previous_state == States.PLAYING:
@@ -173,26 +183,28 @@ class Game(QMainWindow):
             self.pause_screen.raise_()
             self.pause_screen.setFocus()
 
+        # Состояние "Экран конца"
         elif self.state == States.END_SCREEN:
             self.music_player.stop()
             self.pause_screen.hide()
             self.end_screen.setGeometry(0, 0, self.width(), self.height())
-            self.end_screen.update_final_stats()
+            if self.previous_state != States.STATS:
+                self.end_screen.update_final_stats()
             self.stacked_widget.setCurrentWidget(self.end_screen)
 
+        # Состояние "Экран статистики"
         elif self.state == States.STATS:
             self.pause_screen.hide()
             self.music_player.pause()
+            self.stats_return_state = self.previous_state
             if self.previous_state in (States.PAUSE_MENU, States.PLAYING):
                 self.stats_overlay = True
                 self.stacked_widget.setCurrentWidget(self.game_screen)
-            elif self.previous_state == States.END_SCREEN:
-                self.stats_overlay = True
-                self.stacked_widget.setCurrentWidget(self.end_screen)
             else:
                 self.stats_overlay = False
                 self.menu_screen.menu_container.hide()
                 self.stacked_widget.setCurrentWidget(self.menu_screen)
+
             self.stats_screen.setGeometry(0, 0, self.width(), self.height())
             self.stats_screen.refresh_stats()
             self.stats_screen.show()
@@ -314,8 +326,8 @@ class Game(QMainWindow):
                 self.set_state(States.PLAYING)
                 return
             elif self.state == States.STATS:
-                if self.stats_overlay:
-                    self.set_state(States.PAUSE_MENU)
+                if hasattr(self, 'stats_return_state') and self.stats_return_state:
+                    self.set_state(self.stats_return_state)
                 else:
                     self.set_state(States.MAIN_MENU)
                 return

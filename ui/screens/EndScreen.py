@@ -15,6 +15,7 @@ class EndScreen(BackgroundPage):
         super().__init__(obj, True, bg_path=MAIN_MENU_BG)
         self.game = obj
         self.lang = self.game.lang_manager
+        self._stats_loaded = False
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -42,22 +43,24 @@ class EndScreen(BackgroundPage):
         self.lang.language_changed.connect(self.update_ui)
         self.update_ui()
 
-        self.panel.layout.addWidget(self.wpm_label)
-        self.panel.layout.addWidget(self.acc_label)
-        self.panel.layout.addWidget(self.timer_label)
-        self.panel.layout.addWidget(self.btn_try_again)
-        self.panel.layout.addWidget(self.btn_statics)
-        self.panel.layout.addWidget(self.btn_menu)
+        self.panel.addWidget(self.wpm_label)
+        self.panel.addWidget(self.acc_label)
+        self.panel.addWidget(self.timer_label)
+        self.panel.addWidget(self.btn_try_again)
+        self.panel.addWidget(self.btn_statics)
+        self.panel.addWidget(self.btn_menu)
 
-        menu_container = QWidget()
-        menu_layout = QVBoxLayout(menu_container)
+        self.update_ui()
+
+        self.menu_container = QWidget()
+        menu_layout = QVBoxLayout(self.menu_container)
         menu_layout.setContentsMargins(0, 0, 0, 0)
         menu_layout.setSpacing(20)
-        menu_layout.addWidget(self.title)
-        menu_layout.addWidget(self.panel)
+        menu_layout.addWidget(self.title, alignment=Qt.AlignmentFlag.AlignCenter)
+        menu_layout.addWidget(self.panel, alignment=Qt.AlignmentFlag.AlignCenter)
 
         layout.addStretch()
-        layout.addWidget(menu_container)
+        layout.addWidget(self.menu_container, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addStretch()
 
         self.setLayout(layout)
@@ -88,6 +91,7 @@ class EndScreen(BackgroundPage):
         """
         Функция для подсчета финальной статистики
         """
+        self._stats_loaded = True
         self.wpm_label.setText(f"WPM: {self.game.stats.final_wpm}")
         self.acc_label.setText(f"{self.lang.get('acc')}: {self.game.stats.final_accuracy}%")
         self.timer_label.setText(f"{self.lang.get('time')}: {self.game.stats.format_time(self.game.stats.final_time)}")
@@ -100,3 +104,10 @@ class EndScreen(BackgroundPage):
         self.btn_statics.setText(self.lang.get("btn_stats"))
         self.btn_menu.setText(self.lang.get("btn_main_menu"))
         self.title.setText(self.lang.get("lvl_complete"))
+
+        if not self._stats_loaded:
+            self.wpm_label.setText("WPM: 000")
+            self.acc_label.setText(f"{self.lang.get('acc')}: 100.0%")
+            self.timer_label.setText(f"{self.lang.get('time')}: 00:00")
+        else:
+            self.update_final_stats()

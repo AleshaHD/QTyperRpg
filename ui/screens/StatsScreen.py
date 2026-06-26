@@ -4,7 +4,7 @@ from PySide6.QtWidgets import (
     QLabel, QScrollArea, QWidget, QSizePolicy
 )
 from PySide6.QtGui import QPainter, QColor
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QTimer, Qt
 
 from Configuration import *
 from ui.components.Button import PixelButton
@@ -57,16 +57,17 @@ class StatsScreen(BackgroundPage):
         layout.setSpacing(0)
 
         self.panel = MenuPlatform()
-        self.panel.setMinimumHeight(320)
+        self.panel.setMinimumSize(500, 320)
+        self.panel.setFixedWidth(620)
 
         self.title = PixelTextWidget(self.lang.get("game_stats"), TITLE_FONT_SIZE, MAIN_FONT, self.panel)
         self.title.set_effects(shadow=True)
 
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        scroll_area.setStyleSheet("""QScrollArea {background: transparent; border: none;}
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.scroll_area.setStyleSheet("""QScrollArea {background: transparent; border: none;}
         QScrollBar:vertical {background: #2a2a2a; width: 10px; border-radius: 5px;}
         QScrollBar::handle:vertical {background: #555; border-radius: 5px;min-height:20px}
         QScrollBar::handle:vertical:hover {background: #777;}
@@ -75,10 +76,10 @@ class StatsScreen(BackgroundPage):
         self.stats_container = QWidget()
         self.stats_container.setStyleSheet("background: transparent;")
         self.stats_layout = QVBoxLayout(self.stats_container)
-        self.stats_layout.setContentsMargins(5, 5, 5, 5)
+        self.stats_layout.setContentsMargins(15, 10, 15, 10)
         self.stats_layout.setSpacing(10)
         self.stats_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        scroll_area.setWidget(self.stats_container)
+        self.scroll_area.setWidget(self.stats_container)
 
         self.stats_text = QLabel()
         self.stats_text.setWordWrap(True)
@@ -93,29 +94,34 @@ class StatsScreen(BackgroundPage):
         self.btn_back.clicked.connect(self.back_to_menu)
         self.btn_reset.clicked.connect(self.reset_stats)
         self.lang.language_changed.connect(self.update_ui)
-        self.update_ui()
 
         btn_layout = QHBoxLayout()
+        btn_layout.addStretch()
         btn_layout.addWidget(self.btn_back)
+        btn_layout.addSpacing(20)
         btn_layout.addWidget(self.btn_reset)
+        btn_layout.addStretch()
 
-        self.panel.layout.addWidget(scroll_area)
-        self.panel.layout.addLayout(btn_layout)
+        self.panel.addWidget(self.scroll_area)
+        self.panel.main_layout.addSpacing(15)
+        self.panel.main_layout.addLayout(btn_layout)
+        self.panel.main_layout.addSpacing(15)
 
-        menu_container = QWidget()
-        menu_layout = QVBoxLayout(menu_container)
+        self.menu_container = QWidget()
+        menu_layout = QVBoxLayout(self.menu_container)
         menu_layout.setContentsMargins(0, 0, 0, 0)
         menu_layout.setSpacing(20)
-        menu_layout.addWidget(self.title)
-        menu_layout.addWidget(self.panel)
+        menu_layout.addWidget(self.title, alignment=Qt.AlignmentFlag.AlignCenter)
+        menu_layout.addWidget(self.panel, alignment=Qt.AlignmentFlag.AlignCenter)
 
         layout.addStretch()
-        layout.addWidget(menu_container)
+        layout.addWidget(self.menu_container, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addStretch()
 
         self.setLayout(layout)
 
         self.refresh_stats()
+        self.update_ui()
 
     def back_to_menu(self):
         """
@@ -123,8 +129,8 @@ class StatsScreen(BackgroundPage):
         """
         self.game.sound_player.play("click")
         self.game.save_settings()
-        if hasattr(self.game, 'return_state') and self.game.return_state in (States.PAUSE_MENU, States.PLAYING, States.END_SCREEN):
-            self.game.set_state(self.game.return_state)
+        if hasattr(self.game, 'stats_return_state') and self.game.stats_return_state:
+            self.game.set_state(self.game.stats_return_state)
         else:
             self.game.set_state(States.MAIN_MENU)
 
@@ -132,57 +138,70 @@ class StatsScreen(BackgroundPage):
         """
         Функция для обновления отображения списка статистики
         """
-        self.game.sound_player.play("click")
         while self.stats_layout.count():
             child = self.stats_layout.takeAt(0)
             if child.widget():
-                child.widget().deleteLater()
+                w = child.widget()
+                w.setParent(None)
+                w.deleteLater()
 
+        self.stats_layout.invalidate()
         matches = self.game.stats_history.get_all_matches()
         if not matches:
-            self.msg = PixelTextWidget(self.lang.get("no_matches_found"), 18, MAIN_FONT, self)
-            self.msg.set_effects(color=QColor(150, 150, 150))
-            self.stats_layout.addWidget(self.msg)
+            self.msg = PixelTextWidget(self.lang.get("no_matches_found"), 18, MAIN_FONT, self.stats_container)
+            self.msg.set_effects(color=QColor(150, 150, 150), alignment=Qt.AlignmentFlag.AlignCenter)
+            self.msg.setMinimumHeight(40) 
+            self.stats_layout.addWidget(self.msg, alignment=Qt.AlignmentFlag.AlignCenter)
         else:
+            self.msg = None
             for i, m in enumerate(matches, 1):
                 text = f"{i}. {m['timestamp']} | WPM: {m['wpm']} | ACC: {m['accuracy']}%"
-                row = PixelTextWidget(text, 16, MAIN_FONT, self)
+                row = PixelTextWidget(text, 16, MAIN_FONT, self.stats_container)
                 row.set_effects(color=QColor(220, 220, 220), alignment=Qt.AlignmentFlag.AlignLeft)
                 row.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+                row.setFixedHeight(36)
                 self.stats_layout.addWidget(row)
-        self.stats_container.adjustSize()
-        self.adjust_panel_size()
+        self.stats_layout.activate()
+        QTimer.singleShot(0, self.adjust_panel_size)
 
     def reset_stats(self):
+        self.game.sound_player.play("click")
         self.game.stats_history.matches = []
         self.game.stats_history.save()
         self.refresh_stats()
-        self.msg = None
 
     def adjust_panel_size(self):
-        self.stats_layout.activate()
-        self.stats_container.adjustSize()
+        if not hasattr(self, 'game') or not hasattr(self.game, 'stats_history'):
+            return
 
-        stats_h = self.stats_container.sizeHint().height()
-        title_h = self.title.sizeHint().height()
-        buttons_h = self.btn_back.sizeHint().height() + 40 
+        matches = self.game.stats_history.get_all_matches()
+        
+        if not matches:
+            content_height = 40
+        else:
+            content_height = len(matches) * 36 + (len(matches) - 1) * 10 + 20
 
-        must_height = title_h + stats_h + buttons_h + 100
-        max_height = self.height() - 100
-        min_height = 320
-        final_height = max(min_height, min(must_height, max_height))
+        chrome_height = 150 
+        
+        max_allowed_height = 520
+        if self.height() > 100:
+            max_allowed_height = min(520, self.height() - 60)
 
-        stats_w = self.stats_container.sizeHint().width()
-        title_w = self.title.sizeHint().width()
-        btns_w = self.btn_back.sizeHint().width() + self.btn_reset.sizeHint().width() + 60
+        final_height = max(320, min(content_height + chrome_height, max_allowed_height))
 
-        final_width = max(title_w, stats_w, btns_w, 300) + 80
-        final_width = min(final_width, 700)
+        self.panel.setFixedSize(620, final_height)
+        self.scroll_area.verticalScrollBar().setValue(0)
 
-        self.panel.setMinimumSize(int(final_width), int(final_height))
-        self.panel.resize(int(final_width), int(final_height))
-        self.panel.update()
-
+        self.panel.updateGeometry()
+        if hasattr(self, 'menu_container'):
+            self.menu_container.updateGeometry()
+            self.menu_container.adjustSize()
+            
+        if self.layout():
+            self.layout().invalidate()
+            self.layout().activate()
+        self.update()
+    
     def update_ui(self):
         """
         Функция для обновления текста на экране при смене языка
@@ -196,7 +215,8 @@ class StatsScreen(BackgroundPage):
         self.title.adjustSize()
         self.btn_back.adjustSize()
         self.btn_reset.adjustSize()
-        self.adjust_panel_size()
+
+        self.refresh_stats()
 
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -208,3 +228,8 @@ class StatsScreen(BackgroundPage):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
+        QTimer.singleShot(0, self.adjust_panel_size)
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        self.refresh_stats()

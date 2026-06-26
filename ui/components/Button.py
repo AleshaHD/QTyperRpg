@@ -19,6 +19,8 @@ class PixelButton(QPushButton):
         self.last_time = time.time()
         self.r = 2
 
+        self._click_debounce_time = 0.0
+
         self.setMouseTracking(True)
         self.cursor_pos = QPoint(0, 0)
         self.is_hovered = False
@@ -121,7 +123,7 @@ class PixelButton(QPushButton):
                 noise = random.randint(-14, 14)
                 final_v = max(0, min(255, grad_v + noise))
                 final_s = max(0, min(255, int(s_val * (1.0 + row_factor * 0.15))))
-                self.pixel_color = QColor.fromHsv(h_val, final_s, final_v)
+                current_pixel_color = QColor.fromHsv(h_val, final_s, final_v)
                 
                 is_follower = random.random() < follower_chance
                 speed = random.uniform(2.2, 5.4)
@@ -140,7 +142,7 @@ class PixelButton(QPushButton):
                     'delay_timer': delay,
                     'max_delay': delay,
                     'progress': 0.0,
-                    'color': self.pixel_color
+                    'color': current_pixel_color
                 })
     
     def get_rounded_corener(self, col, row, r):
@@ -160,6 +162,8 @@ class PixelButton(QPushButton):
         Стандартная функция PySide6
         Фукнция для отрисовки кнопки
         """
+        if not self.pixels:
+            return
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, False)
 
@@ -222,6 +226,11 @@ class PixelButton(QPushButton):
         super().leaveEvent(event)
 
     def mousePressEvent(self, event):
+        current_time = time.time()
+        if current_time - self._click_debounce_time < 0.067:
+            event.ignore()
+            return
+        self._click_debounce_time = current_time
         super().mousePressEvent(event)
         self.update()
 
@@ -232,11 +241,3 @@ class PixelButton(QPushButton):
     def mouseMoveEvent(self, event):
         self.cursor_pos = event.pos()
         super().mouseMoveEvent(event)
-
-    def _auto_align(self):
-        if self.parentWidget() and self.parentWidget().layout:
-            self.parentWidget().layout.setAlignment(self, Qt.AlignmentFlag.AlignHCenter)
-
-    def showEvent(self, event):
-        super().showEvent(event)
-        QTimer.singleShot(0, self._auto_align)

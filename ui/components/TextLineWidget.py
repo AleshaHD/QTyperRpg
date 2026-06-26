@@ -153,8 +153,10 @@ class PixelTextWidget(QWidget):
         self.update_geometry_size()
 
     def set_text(self, text):
+        if self.text == text: return
         self.text = text
         self.update_geometry_size()
+        self.adjustSize()
         self.update()
 
     def set_effects(self, color=QColor(255, 255, 255), alignment=Qt.AlignmentFlag.AlignCenter,
@@ -172,25 +174,30 @@ class PixelTextWidget(QWidget):
         self.update()
 
     def update_geometry_size(self):
-        if not self.text:
-            self._calculated_size = QSize(10, 10)
-            return
         metrics = QFontMetrics(self.font())
 
-        w = metrics.horizontalAdvance(self.text)
-        h = metrics.height()
-
-        extra_w = 10
-        extra_h = 10
+        if self.text:
+            rect = metrics.boundingRect(self.text)
+            w = rect.width()
+            h = rect.height()
+        else:
+            w = 10
+            h = 10
 
         if self.has_outline:
-            extra_w += self.outline_thickness * 2
-            extra_h += self.outline_thickness * 2
-        if self.has_shadow:
-            extra_w += self.shadow_offset_x
-            extra_h += self.shadow_offset_y
+            w += self.outline_thickness * 2
+            h += self.outline_thickness * 2
 
-        self._calculated_size = QSize(w + extra_w, h + extra_h)
+        if self.has_shadow:
+            w += self.shadow_offset_x
+            h += self.shadow_offset_y
+
+        w += 10
+        h += 10
+
+        self._calculated_size = QSize(w, h)
+
+        self.setMinimumSize(self._calculated_size)
         self.updateGeometry()
 
     def setText(self, text):

@@ -1,4 +1,5 @@
-from PySide6.QtWidgets import QVBoxLayout, QWidget
+from PySide6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
+from PySide6.QtCore import Qt
 
 from Configuration import *
 from ui.components.Button import PixelButton
@@ -35,20 +36,20 @@ class MainMenu(BackgroundPage):
         self.lang.language_changed.connect(self.update_ui)
         self.update_ui()
 
-        self.panel.layout.addWidget(self.btn_start)
-        self.panel.layout.addWidget(self.btn_stats)
-        self.panel.layout.addWidget(self.btn_settings)
-        self.panel.layout.addWidget(self.btn_exit)
+        self.panel.addWidget(self.btn_start)
+        self.panel.addWidget(self.btn_stats)
+        self.panel.addWidget(self.btn_settings)
+        self.panel.addWidget(self.btn_exit)
 
         self.menu_container = QWidget()
         menu_layout = QVBoxLayout(self.menu_container)
         menu_layout.setContentsMargins(0, 0, 0, 0)
         menu_layout.setSpacing(20)
-        menu_layout.addWidget(self.title)
-        menu_layout.addWidget(self.panel)
+        menu_layout.addWidget(self.title, alignment=Qt.AlignmentFlag.AlignCenter)
+        menu_layout.addWidget(self.panel, alignment=Qt.AlignmentFlag.AlignCenter)
 
         layout.addStretch()
-        layout.addWidget(self.menu_container)
+        layout.addWidget(self.menu_container, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addStretch()
 
         self.setLayout(layout)

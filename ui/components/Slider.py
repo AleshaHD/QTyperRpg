@@ -36,8 +36,8 @@ class PixelSlider(QSlider):
         self.update_value(event.position().x())
 
     def _auto_align(self):
-        if self.parentWidget() and self.parentWidget().layout:
-            self.parentWidget().layout.setAlignment(self, Qt.AlignmentFlag.AlignHCenter)
+        if self.parentWidget() and self.parentWidget().layout():
+            self.parentWidget().layout().setAlignment(self, Qt.AlignmentFlag.AlignHCenter)
 
     def showEvent(self, event):
         super().showEvent(event)

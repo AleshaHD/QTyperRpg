@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QVBoxLayout, QWidget
 from PySide6.QtGui import QColor, QPainter
+from PySide6.QtCore import Qt
 
 from Configuration import *
 from ui.components.Button import PixelButton
@@ -75,25 +76,25 @@ class SettingsScreen(BackgroundPage):
         self.mus_slider.valueChanged.connect(self.update_music)
         self.mus_slider.valueChanged.connect(self.game.music_player.set_volume)
         
-        self.panel.layout.addWidget(self.mus_label)
-        self.panel.layout.addWidget(self.mus_slider)
-        self.panel.layout.addWidget(self.vol_label)
-        self.panel.layout.addWidget(self.vol_slider)
-        self.panel.layout.addWidget(self.lang_label)
-        self.panel.layout.addWidget(self.lang_combo)
-        self.panel.layout.addWidget(self.window_mode)
-        self.panel.layout.addWidget(self.mode_combo)
-        self.panel.layout.addWidget(self.btn_back)
+        self.panel.addWidget(self.mus_label)
+        self.panel.addWidget(self.mus_slider)
+        self.panel.addWidget(self.vol_label)
+        self.panel.addWidget(self.vol_slider)
+        self.panel.addWidget(self.lang_label)
+        self.panel.addWidget(self.lang_combo)
+        self.panel.addWidget(self.window_mode)
+        self.panel.addWidget(self.mode_combo)
+        self.panel.addWidget(self.btn_back)
 
         menu_container = QWidget()
         menu_layout = QVBoxLayout(menu_container)
         menu_layout.setContentsMargins(0, 0, 0, 0)
         menu_layout.setSpacing(20)
-        menu_layout.addWidget(self.title)
-        menu_layout.addWidget(self.panel)
+        menu_layout.addWidget(self.title, alignment=Qt.AlignmentFlag.AlignCenter)
+        menu_layout.addWidget(self.panel, alignment=Qt.AlignmentFlag.AlignCenter)
 
         layout.addStretch()
-        layout.addWidget(menu_container)
+        layout.addWidget(menu_container, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addStretch()
 
         self.setLayout(layout)

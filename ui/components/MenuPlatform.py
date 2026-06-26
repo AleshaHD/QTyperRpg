@@ -16,19 +16,10 @@ class MenuPlatform(QFrame):
         self.chached_pixmap = QPixmap()
         self.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
 
-        self.layout = QVBoxLayout(self)
-        self.layout.setContentsMargins(24, 24, 24, 24)
-        self.layout.setSpacing(12)
-        self.layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-    def sizeHint(self):
-        base_hint = self.layout.sizeHint()
-        if base_hint.isEmpty():
-            return QSize(280, 320)
-
-        w = max(280, math.ceil(base_hint.width() / self.pixel_size) * self.pixel_size)
-        h = max(320, math.ceil(base_hint.height() / self.pixel_size) * self.pixel_size)
-        return QSize(w, h)
+        self.main_layout = QVBoxLayout(self)
+        self.main_layout.setContentsMargins(24, 24, 24, 24)
+        self.main_layout.setSpacing(12)
+        self.main_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def is_inside_bounds(self, col, row, cols, rows):
         """
@@ -104,6 +95,9 @@ class MenuPlatform(QFrame):
         self.setSizePolicy(policy, policy)
         self.updateGeometry()
 
+    def addWidget(self, widget, alignment=Qt.AlignmentFlag.AlignCenter):
+        self.main_layout.addWidget(widget, alignment=alignment)
+
     def paintEvent(self, event):
         """
         Стандартная функция PySide6
@@ -118,11 +112,14 @@ class MenuPlatform(QFrame):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.generate_pixels()
+        self.updateGeometry()
 
-    def _auto_align(self):
-        if self.parentWidget() and self.parentWidget().layout():
-            self.parentWidget().layout().setAlignment(self, Qt.AlignmentFlag.AlignCenter)
+    def sizeHint(self):
+        if not self.main_layout or self.main_layout.count() == 0:
+            return QSize(320, 240)
+        
+        hint = self.main_layout.sizeHint()
+        return QSize(hint.width(), hint.height())
 
-    def showEvent(self, event):
-        super().showEvent(event)
-        QTimer.singleShot(0, self._auto_align)
+    def minimumSizeHint(self):
+        return self.sizeHint()
