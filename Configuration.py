@@ -17,7 +17,7 @@ class Difficult(Enum):
     NORMAL = auto()
     HARD = auto()
 
-TEST_TEXT = True
+TEST_TEXT = False
 TITLE_FONT_SIZE = 24
 
 BLACK = (0, 0, 0)
