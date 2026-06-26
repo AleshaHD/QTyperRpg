@@ -1,7 +1,7 @@
 import math
 from PySide6.QtWidgets import QFrame, QSizePolicy, QVBoxLayout
 from PySide6.QtGui import QPainter, QColor, QPixmap
-from PySide6.QtCore import Qt, QSize, QTimer
+from PySide6.QtCore import Qt, QSize
 
 class MenuPlatform(QFrame):
     """

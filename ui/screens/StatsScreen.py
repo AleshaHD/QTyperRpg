@@ -1,3 +1,4 @@
+from ctypes import alignment
 import json, time
 from PySide6.QtWidgets import (
     QHBoxLayout, QVBoxLayout,
@@ -103,9 +104,7 @@ class StatsScreen(BackgroundPage):
         btn_layout.addStretch()
 
         self.panel.addWidget(self.scroll_area)
-        self.panel.main_layout.addSpacing(15)
         self.panel.main_layout.addLayout(btn_layout)
-        self.panel.main_layout.addSpacing(15)
 
         self.menu_container = QWidget()
         menu_layout = QVBoxLayout(self.menu_container)
@@ -181,7 +180,7 @@ class StatsScreen(BackgroundPage):
         else:
             content_height = len(matches) * 36 + (len(matches) - 1) * 10 + 20
 
-        chrome_height = 150 
+        chrome_height = 130 
         
         max_allowed_height = 520
         if self.height() > 100:
