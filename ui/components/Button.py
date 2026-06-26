@@ -8,7 +8,7 @@ from ui.components.TextLineWidget import load_font
 
 class PixelButton(QPushButton):
     """
-    Класс для создания кнопки
+    Класс для создания кастомной кнопки
     """
     def __init__(self, text, parent=None, color_hex="#8b0000"):
         super().__init__(text, parent)

@@ -11,7 +11,7 @@ from ui.components.TextLineWidget import load_font
 
 class PixelListView(QListView):
     """
-    Класс
+    Класс для создания кастомного слайдера
     """
     def __init__(self, parent=None, pixel_size=4, r=2):
         super().__init__(parent)

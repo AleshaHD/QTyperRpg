@@ -5,7 +5,6 @@ class MusicPlayer:
     Класс для музыки
     """
     def __init__(self, volume=100):
-        # Инициализируем микшер, если он еще не инициализирован
         self.mixer = pygame.mixer
         if not self.mixer.get_init():
             self.mixer.init()
@@ -14,7 +13,6 @@ class MusicPlayer:
         self.set_volume(volume)
 
     def play_track(self, file_path):
-        # Если трек уже играет, не перезапускаем его
         if self.current_track == file_path and self.mixer.music.get_busy():
             return
 
@@ -38,9 +36,6 @@ class MusicPlayer:
 
     def set_volume(self, value):
         self.mixer.music.set_volume(float(value) / 100.0)
-
-    # def play(self):
-    #     self.mixer.music.play()
 
 class SoundPlayer:
     def __init__(self, volume=100):

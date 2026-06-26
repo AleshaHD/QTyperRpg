@@ -1,4 +1,3 @@
-from ctypes import alignment
 import json, time
 from PySide6.QtWidgets import (
     QHBoxLayout, QVBoxLayout,
@@ -105,6 +104,7 @@ class StatsScreen(BackgroundPage):
 
         self.panel.addWidget(self.scroll_area)
         self.panel.main_layout.addLayout(btn_layout)
+        self.panel.main_layout.setAlignment(Qt.AlignmentFlag.AlignAbsolute)
 
         self.menu_container = QWidget()
         menu_layout = QVBoxLayout(self.menu_container)

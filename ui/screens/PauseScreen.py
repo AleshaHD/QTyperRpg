@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QVBoxLayout, QWidget
-from PySide6.QtGui import QColor,QPainter
+from PySide6.QtGui import QColor, QPainter
 from PySide6.QtCore import Qt
 
 from Configuration import *
